@@ -58,7 +58,7 @@ class Product(models.Model):
         (CATEGORY_PACKAGED_FOODS, 'Пакетирани храни'),
         (CATEGORY_SPICES, 'Подправки')
     ]
-
+    
     name = models.CharField(
         max_length=30,
         verbose_name='Продукт',
@@ -72,7 +72,7 @@ class Product(models.Model):
     )
 
     category = models.CharField(
-        max_length=30,
+        max_length=35,
         verbose_name='Категория',
         choices=CATEGORY_CHOICES
     )
