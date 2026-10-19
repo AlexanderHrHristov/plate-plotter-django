@@ -1,0 +1,14 @@
+{% extends 'base.html' %} {% block title %}Магазини | PlatePlotter{% endblock %}
+{% block content %}
+<h1>Магазини</h1>
+
+<a href="{% url 'store-add' %}" class="btn btn-primary"> Добави магазин </a>
+
+<ul class="list-group mt-3">
+  {% for store in stores %}
+  <li class="list-group-item">{{ store.name }}</li>
+  {% empty %}
+  <li class="list-group-item">Все още няма добавени магазини.</li>
+  {% endfor %}
+</ul>
+{% endblock %}
