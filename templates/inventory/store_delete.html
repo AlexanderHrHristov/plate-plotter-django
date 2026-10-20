@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block title %}Изтриване на магазин{% endblock %}
+
+{% block content %}
+    <h2>Изтриване на магазин</h2>
+
+    <p>Изтрий магазина "{{ object.name }}"?</p>
+
+    <form method="post">
+        {% csrf_token %}
+
+        <button type="submit" class="btn btn-danger">
+            Изтрий
+        </button>
+
+        <a href="{% url 'store-list' %}" class="btn btn-secondary">
+            Отказ
+        </a>
+    </form>
+{% endblock %}

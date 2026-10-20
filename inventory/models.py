@@ -1,8 +1,15 @@
 from django.db import models
 
 class Store(models.Model):
-    name = models.CharField(max_length=30, unique=True)
-
+    name = models.CharField(
+        max_length=30,
+        verbose_name='Име',
+        unique=True,
+        error_messages={
+        'unique': 'Вече съществува магазин с това име.'
+    }
+    )
+    
     def __str__(self):
         return self.name
 

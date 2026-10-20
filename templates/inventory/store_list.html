@@ -1,14 +1,37 @@
-{% extends 'base.html' %} {% block title %}Магазини | PlatePlotter{% endblock %}
+{% extends 'base.html' %}
+
+{% block title %}Магазини | PlatePlotter{% endblock %}
+
 {% block content %}
 <h1>Магазини</h1>
 
-<a href="{% url 'store-add' %}" class="btn btn-primary"> Добави магазин </a>
+<a href="{% url 'store-add' %}" class="btn btn-primary mb-3">
+    Добави магазин
+</a>
 
-<ul class="list-group mt-3">
-  {% for store in stores %}
-  <li class="list-group-item">{{ store.name }}</li>
-  {% empty %}
-  <li class="list-group-item">Все още няма добавени магазини.</li>
-  {% endfor %}
+<ul class="list-group">
+    {% for store in stores %}
+        <li class="list-group-item d-flex justify-content-between align-items-center">
+
+            <span>{{ store.name }}</span>
+
+            <div>
+                <a href="{% url 'store-edit' store.pk %}"
+                   class="btn btn-outline-primary btn-sm">
+                    Редактирай
+                </a>
+
+                <a href="{% url 'store-delete' store.pk %}"
+                   class="btn btn-outline-danger btn-sm">
+                    Изтрий
+                </a>
+            </div>
+
+        </li>
+    {% empty %}
+        <li class="list-group-item">
+            Все още няма добавени магазини.
+        </li>
+    {% endfor %}
 </ul>
 {% endblock %}
