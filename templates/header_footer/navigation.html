@@ -3,12 +3,10 @@
     <div class="container">
       <a class="navbar-brand" href="{% url 'store-list' %}"> PlatePlotter </a>
 
-      <div class="collapse navbar-collapse show">
-        <ul class="navbar-nav me-auto">
-          <li class="nav-item">
-            <a class="nav-link" href="{% url 'store-list' %}"> Магазини </a>
-          </li>
-        </ul>
+      <div class="navbar-nav d-flex flex-row gap-4 ms-4">
+        <a href="{% url 'store-list' %}" class="nav-link"> Магазини </a>
+
+        <a href="{% url 'product-list' %}" class="nav-link"> Продукти </a>
       </div>
     </div>
   </nav>

@@ -1,0 +1,12 @@
+{% extends 'base.html' %} {% block title %} Добавяне на продукт | PlatePlotter
+{% endblock %} {% block content %}
+<h1>Добавяне на продукт</h1>
+
+<form method="post">
+  {% csrf_token %} {{ form.as_p }}
+
+  <button type="submit" class="btn btn-success">Запази</button>
+
+  <a href="{% url 'product-list' %}" class="btn btn-secondary"> Отказ </a>
+</form>
+{% endblock %}
