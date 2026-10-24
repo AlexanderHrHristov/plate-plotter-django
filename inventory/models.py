@@ -1,5 +1,9 @@
 from django.db import models
 
+from decimal import Decimal
+from django.core.validators import MinValueValidator
+
+
 class Store(models.Model):
     name = models.CharField(
         max_length=30,
@@ -18,10 +22,10 @@ class Store(models.Model):
         ordering = ['name']
 
 
+
 class Product(models.Model):
 
-    # Модел за хранителните продукти в приложението
-
+  
     UNIT_GRAMS = 'g'
     UNIT_ML = 'ml'
     UNIT_PCS = 'pcs'
@@ -31,33 +35,22 @@ class Product(models.Model):
         (UNIT_ML, 'мл'),
         (UNIT_PCS, 'бр')
     ]
-
-    PRICE_UNIT_KG = 'kg'
-    PRICE_UNIT_LITER = 'liter'
-    PRICE_UNIT_PACKAGE = 'package'
-
-    PRICE_UNIT_CHOICES = [
-        (PRICE_UNIT_KG, 'кг'),
-        (PRICE_UNIT_LITER, 'литър'),
-        (PRICE_UNIT_PACKAGE, 'опаковка')
-    ]
-
     CATEGORY_MEAT_FISH_EGGS = 'meat_fish_eggs'
-    CATEGORY_MILK_CHEESE = "milk_cheese"
-    CATEGORY_FRUIT_VEGETABLES = "fruit_vegetables"
-    CATEGORY_GRAINS_LEGUMES = "grains_legumes"
-    CATEGORY_NUTS = "nuts"
-    CATEGORY_OILS = "oils"
-    CATEGORY_SWEETS = "sweets"
-    CATEGORY_DRINKS = "drinks"
-    CATEGORY_PACKAGED_FOODS = "packaged_foods"
-    CATEGORY_SPICES = "spices"
+    CATEGORY_MILK_CHEESE = 'milk_cheese'
+    CATEGORY_FRUIT_VEGETABLES = 'fruit_vegetables'
+    CATEGORY_GRAINS_LEGUMES = 'grains_legumes'
+    CATEGORY_NUTS = 'nuts'
+    CATEGORY_OILS = 'oils'
+    CATEGORY_SWEETS = 'sweets'
+    CATEGORY_DRINKS = 'drinks'
+    CATEGORY_PACKAGED_FOODS = 'packaged_foods'
+    CATEGORY_SPICES = 'spices'
 
     CATEGORY_CHOICES = [
         (CATEGORY_MEAT_FISH_EGGS, 'Месо, риба, яйца'),
         (CATEGORY_MILK_CHEESE, 'Млекопродукти'),
         (CATEGORY_FRUIT_VEGETABLES, 'Плодове и зеленчуци'),
-        (CATEGORY_GRAINS_LEGUMES, 'Зърнени и бобови'),
+        (CATEGORY_GRAINS_LEGUMES, 'Хляб, зърнени и бобови продукти'),
         (CATEGORY_NUTS, 'Ядки'),
         (CATEGORY_OILS, 'Масла'),
         (CATEGORY_SWEETS, 'Сладки и десерти'),
@@ -65,11 +58,10 @@ class Product(models.Model):
         (CATEGORY_PACKAGED_FOODS, 'Пакетирани храни'),
         (CATEGORY_SPICES, 'Подправки')
     ]
-    
+
     name = models.CharField(
         max_length=30,
-        verbose_name='Продукт',
-        blank=False
+        verbose_name='Продукт'
     )
 
     brand = models.CharField(
@@ -96,52 +88,22 @@ class Product(models.Model):
         choices=UNIT_CHOICES
     )
 
-    price = models.DecimalField(
-        max_digits=6,
+    package_quantity = models.DecimalField(
+        max_digits=10,
         decimal_places=2,
-        verbose_name='Цена'
+        default=1,
+        validators=[MinValueValidator(Decimal('0.01'))],
+        verbose_name='Количество в опаковка'
     )
 
-    price_unit = models.CharField(
-        max_length=10,
-        verbose_name='Цена за',
-        choices=PRICE_UNIT_CHOICES
+    price = models.DecimalField(
+        max_digits=8,
+        decimal_places=2,
+        validators=[MinValueValidator(Decimal('0.01'))],
+        verbose_name='Цена за опаковка'
     )
 
-    # Хранителна стойност на продуктите
-
-    calories = models.DecimalField(
-        max_digits=5,
-        decimal_places=1,
-        verbose_name='Калории (kcal)',
-        blank=True,
-        null=True
-    )
-
-    protein_per_100g = models.DecimalField(
-        max_digits=5,
-        decimal_places=1,
-        verbose_name='Белтъчини (g/100g)',
-        blank=True,
-        null=True
-    )
-
-    carbs_per_100g = models.DecimalField(
-        max_digits=5,
-        decimal_places=1,
-        verbose_name='Въглехидрати (g/100g)',
-        blank=True,
-        null=True
-    )
-
-    fats_per_100g = models.DecimalField(
-        max_digits=5,
-        decimal_places=1,
-        verbose_name='Мазнини (g/100g)',
-        blank=True,
-        null=True
-    )
-
+ 
     is_basic = models.BooleanField(
         default=False,
         verbose_name='Основен продукт',
@@ -154,12 +116,13 @@ class Product(models.Model):
         return self.name
 
     class Meta:
-        unique_together = ("name", "brand", "store")
+        unique_together = ('name', 'brand', 'store')
         ordering = ['name']
         verbose_name = 'Продукт'
-        
-        
-        
+        verbose_name_plural = 'Продукти'
+
+
+
 class Inventory(models.Model):
     product = models.OneToOneField(
         Product,

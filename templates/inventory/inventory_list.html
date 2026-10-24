@@ -30,12 +30,12 @@
 
         {% if product.inventory %}
             <td>
-                {{ product.inventory.available_quantity }}
-                {{ product.unit }}
+                {{ product.inventory.available_quantity|floatformat:"-2" }}
+                {{ product.get_unit_display }}
             </td>
             <td>
-                {{ product.inventory.minimum_quantity }}
-                {{ product.unit }}
+                {{ product.inventory.minimum_quantity|floatformat:"-2" }}
+                {{ product.get_unit_display }}
             </td>
             <td>
                 {% if product.inventory.is_product_below_minimum %}

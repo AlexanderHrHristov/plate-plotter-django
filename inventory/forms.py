@@ -10,7 +10,16 @@ class StoreForm(forms.ModelForm):
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
-        fields = '__all__'        
+        fields = [
+            'name',
+            'brand',
+            'category',
+            'store',
+            'unit',
+            'package_quantity',
+            'price',
+            'is_basic',
+        ]       
 
 
 class InventoryForm(forms.ModelForm):
