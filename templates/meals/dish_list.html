@@ -1,0 +1,63 @@
+
+{% extends 'base.html' %}
+
+{% block title %}Ястия | PlatePlotter{% endblock %}
+
+{% block content %}
+<h1>Ястия</h1>
+
+<a href="{% url 'dish-add' %}" class="btn btn-primary mb-3">
+    Добави ястие
+</a>
+
+<div class="table-responsive">
+    <table class="table table-striped table-hover align-middle w-100">
+        <thead>
+            <tr>
+                <th>Име</th>
+                <th>Описание</th>
+                <th>Време за приготвяне</th>
+                <th>Порции</th>
+                <th style="min-width: 380px;">Действия</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            {% for dish in dishes %}
+            <tr>
+                <td><a href="{% url 'dish-detail' dish.pk %}">{{ dish.name }}</a></td>
+                <td>{{ dish.description }}</td>
+                <td>{{ dish.preparation_time }} мин.</td>
+                <td>{{ dish.servings }}</td>
+
+                <td>
+                    <div class="d-flex flex-nowrap gap-2">
+                        <a href="{% url 'dish-edit' dish.pk %}"
+                           class="btn btn-warning btn-sm">
+                            Редактирай
+                        </a>
+
+                        <a href="{% url 'dish-delete' dish.pk %}"
+                           class="btn btn-danger btn-sm">
+                            Изтрий
+                        </a>
+
+                        <a href="{% url 'recipeitem-add' dish.pk %}"
+                           class="btn btn-success btn-sm">
+                            Добави съставка
+                        </a>
+                    </div>
+                </td>
+            </tr>
+
+            {% empty %}
+            <tr>
+                <td colspan="5" class="text-center">
+                    Все още няма добавени ястия.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+{% endblock %}

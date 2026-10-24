@@ -1,0 +1,25 @@
+
+{% extends 'base.html' %}
+
+{% block title %}Изтриване на ястие | PlatePlotter{% endblock %}
+
+{% block content %}
+<h1>Изтриване на ястие</h1>
+
+<p>
+    Сигурен ли си, че искаш да изтриеш
+    <strong>{{ object.name }}</strong>?
+</p>
+
+<form method="post">
+    {% csrf_token %}
+
+    <button type="submit" class="btn btn-danger">
+        Да, изтрий
+    </button>
+
+    <a href="{% url 'dish-list' %}" class="btn btn-secondary">
+        Отказ
+    </a>
+</form>
+{% endblock %}
