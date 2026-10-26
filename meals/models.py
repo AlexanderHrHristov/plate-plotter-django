@@ -1,5 +1,7 @@
 from django.db import models
 
+from decimal import Decimal
+
 class Dish(models.Model):
     name = models.CharField(
         max_length=100, 
@@ -17,6 +19,8 @@ class Dish(models.Model):
         verbose_name='Bрой порции',
         default=1
     )
+    
+        
     products = models.ManyToManyField(
         'inventory.Product', 
         through='RecipeItem',
@@ -25,6 +29,47 @@ class Dish(models.Model):
 
     def __str__(self):
         return self.name
+    
+    def calculate_macros(self):
+        if not self.recipe_items.exists():
+            return None
+        
+        totals = {
+            'calories': Decimal('0'),
+            'protein': Decimal('0'),
+            'carbs': Decimal('0'),
+            'fat': Decimal('0'),
+        }
+
+        for item in self.recipe_items.select_related('product'):
+            product = item.product
+
+            if product.unit != 'g':
+                return None
+            values = (
+                product.calories,
+                product.protein,
+                product.carbs,
+                product.fat,
+            )
+
+            if any(value is None for value in values):
+                return None
+
+            factor = item.quantity / Decimal('100')
+
+            totals['calories'] += Decimal(product.calories) * factor
+            totals['protein'] += product.protein * factor
+            totals['carbs'] += product.carbs * factor
+            totals['fat'] += product.fat * factor
+
+        if self.servings == 0:
+            return None
+
+        return {
+            key: round(value / self.servings, 1)
+            for key, value in totals.items()
+        }
 
     class Meta:
         verbose_name = 'Ястие'
@@ -41,10 +86,8 @@ class RecipeItem(models.Model):
         'inventory.Product', 
         on_delete=models.PROTECT,
         )
-    quantity = models.DecimalField(
-        max_digits=10, 
-        decimal_places=2
-        )
+    quantity = models.PositiveIntegerField()
+    
 
     def __str__(self):
         return f"{self.quantity} of {self.product.name} for {self.dish.name}"

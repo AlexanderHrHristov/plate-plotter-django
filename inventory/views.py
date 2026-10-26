@@ -5,6 +5,9 @@ from django.views.generic import CreateView, ListView, UpdateView, DeleteView
 from .models import Store, Product, Inventory
 from .forms import StoreForm, ProductForm, InventoryForm
 
+from django.http import Http404
+from django.shortcuts import get_object_or_404, redirect
+
 
 class StoreListView(ListView):
     model = Store

@@ -1,8 +1,7 @@
-
 from django import forms
 
-from .models import WeekMenu
-from django.views.generic import DetailView, ListView, CreateView
+from .models import WeekMenu, Meal,MealProduct
+
 
 class WeekMenuForm(forms.ModelForm):
     class Meta:
@@ -28,7 +27,32 @@ class WeekMenuForm(forms.ModelForm):
         }
 
 
-class WeekMenuDetailView(DetailView):
-    model = WeekMenu
-    template_name = 'weekmenu/weekmenu_detail.html'
-    context_object_name = 'week_menu'
+    
+class MealForm(forms.ModelForm):
+    class Meta:
+        model = Meal
+        fields = ['day_of_week', 'meal_type', 'dish']
+        
+        labels = {
+            'day_of_week': 'Ден от седмицата',
+            'meal_type': 'Хранене',
+            'dish': 'Ястие',
+        }
+
+        widgets = {
+            'day_of_week': forms.Select(
+                attrs={'class': 'form-select'}
+            ),
+            'meal_type': forms.Select(
+                attrs={'class': 'form-select'}
+            ),
+            'dish': forms.Select(
+                attrs={'class': 'form-select'}
+            ),
+        }
+
+
+class MealProductForm(forms.ModelForm):
+    class Meta:
+        model = MealProduct
+        fields = ['product', 'quantity']

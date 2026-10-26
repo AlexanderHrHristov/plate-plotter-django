@@ -33,6 +33,7 @@
             <tr>
                 <th>Име</th>
                 <th>Начална дата</th>
+                <th class="text-end">Действия</th>
             </tr>
         </thead>
 
@@ -45,10 +46,22 @@
                 </a>
             </td>
                 <td>{{ menu.start_date|date:"d.m.Y" }}</td>
+                <td class="text-end">
+                    <a href="{% url 'weekmenu-edit' menu.pk %}"
+                    class="btn btn-sm btn-outline-primary">
+                        Редактирай
+                    </a>
+
+                    <a href="{% url 'weekmenu-delete' menu.pk %}"
+                    class="btn btn-sm btn-outline-danger">
+                        Изтрий
+                    </a>
+                </td>
+
             </tr>
             {% empty %}
             <tr>
-                <td colspan="2" class="text-center">
+                <td colspan="3" class="text-center">
                     Все още няма създадени седмични менюта.
                 </td>
             </tr>

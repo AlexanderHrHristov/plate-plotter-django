@@ -4,19 +4,61 @@
 {% block title %}Добавяне на ястие | PlatePlotter{% endblock %}
 
 {% block content %}
-<h1>Добавяне на ястие</h1>
+
+<h1 class="mb-4">Добавяне на ястие</h1>
 
 <form method="post">
     {% csrf_token %}
 
+    <h4>Основна информация</h4>
     {{ form.as_p }}
 
+    <hr>
+
+    <h4 class="mb-3">Съставки на ястието</h4>
+
+    {{ formset.management_form }}
+
+    {% if formset.non_form_errors %}
+        <div class="alert alert-danger">
+            {{ formset.non_form_errors }}
+        </div>
+    {% endif %}
+
+    {% for ingredient_form in formset %}
+        <div class="border rounded p-3 mb-3">
+            <h6>Съставка {{ forloop.counter }}</h6>
+
+            {{ ingredient_form.id }}
+
+            <div class="mb-2">
+                {{ ingredient_form.product.label_tag }}
+                {{ ingredient_form.product }}
+                {{ ingredient_form.product.errors }}
+            </div>
+
+            <div class="mb-2">
+                {{ ingredient_form.quantity.label_tag }}
+                {{ ingredient_form.quantity }}
+                {{ ingredient_form.quantity.errors }}
+            </div>
+
+            {% if ingredient_form.DELETE %}
+                <div class="form-check">
+                    {{ ingredient_form.DELETE }}
+                    {{ ingredient_form.DELETE.label_tag }}
+                </div>
+            {% endif %}
+        </div>
+    {% endfor %}
+
     <button type="submit" class="btn btn-success">
-        Запази
+        Запази ястието
     </button>
 
     <a href="{% url 'dish-list' %}" class="btn btn-secondary">
         Отказ
     </a>
 </form>
+
 {% endblock %}

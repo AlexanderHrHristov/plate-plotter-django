@@ -25,7 +25,7 @@
         {% for item in dish.recipe_items.all %}
         <tr>
             <td>{{ item.product.name }}</td>
-            <td>{{ item.quantity }} {{ item.product.unit }}</td>
+            <td>{{ item.quantity|floatformat:"-2" }} {{ item.product.get_unit_display }}</td>
 
             <td>
                 <div class="d-flex gap-2">
@@ -51,6 +51,43 @@
         {% endfor %}
     </tbody>
 </table>
+
+
+{% with macros=dish.calculate_macros %}
+
+<h3 class="mt-4">Хранителни стойности за порция</h3>
+
+{% if macros %}
+<div class="table-responsive">
+    <table class="table table-bordered text-center align-middle">
+        <thead class="table-light">
+            <tr>
+                <th>Калории</th>
+                <th>Протеин</th>
+                <th>Въглехидрати</th>
+                <th>Мазнини</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ macros.calories|floatformat:"-1" }} kcal</td>
+                <td>{{ macros.protein|floatformat:"-1" }} г</td>
+                <td>{{ macros.carbs|floatformat:"-1" }} г</td>
+                <td>{{ macros.fat|floatformat:"-1" }} г</td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% else %}
+<div class="alert alert-warning">
+    Хранителните стойности не могат да бъдат изчислени.
+    Проверете дали всички съставки имат въведени
+    калории и макроси и дали количествата са в грамове.
+</div>
+{% endif %}
+
+{% endwith %}
+
 
 <a href="{% url 'recipeitem-add' dish.pk %}"
    class="btn btn-success">

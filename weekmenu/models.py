@@ -1,5 +1,7 @@
 from django.db import models
 
+from decimal import Decimal
+
 class WeekMenu(models.Model):
     name=models.CharField(
         max_length=100, 
@@ -21,17 +23,21 @@ class WeekMenu(models.Model):
 
 class Meal(models.Model):
 
-    week_menu=models.ForeignKey(
-        WeekMenu, 
+    week_menu = models.ForeignKey(
+        WeekMenu,
         on_delete=models.CASCADE,
         related_name='meals',
     )
-    dish=models.ForeignKey(
+
+    dish = models.ForeignKey(
         'meals.Dish',
         on_delete=models.CASCADE,
         related_name='planned_meals',
+        blank=True,
+        null=True,
     )
-    day_of_week=models.CharField(
+
+    day_of_week = models.CharField(
         max_length=10,
         verbose_name='Ден от седмицата',
         choices=[
@@ -41,25 +47,76 @@ class Meal(models.Model):
             ('Thursday', 'Четвъртък'),
             ('Friday', 'Петък'),
             ('Saturday', 'Събота'),
-            ('Sunday', 'Неделя')
+            ('Sunday', 'Неделя'),
         ]
     )
 
-    meal_type=models.CharField(
+    meal_type = models.CharField(
         max_length=25,
         verbose_name='Тип ястие',
         choices=[
             ('Breakfast', 'Закуска'),
             ('Lunch', 'Обяд'),
             ('snack', 'Следобедна закуска'),
-            ('Dinner', 'Вечеря')
-        ]   
+            ('Dinner', 'Вечеря'),
+        ]
     )
 
-    
+    def calculate_macros(self):
+        totals = {
+            'calories': Decimal('0'),
+            'protein': Decimal('0'),
+            'carbs': Decimal('0'),
+            'fat': Decimal('0'),
+        }
+
+        if self.dish:
+            dish_macros = self.dish.calculate_macros()
+
+            if dish_macros is None:
+                return None
+
+            for key in totals:
+                totals[key] += dish_macros[key]
+
+        meal_products = self.products.select_related('product')
+
+        if not self.dish and not meal_products.exists():
+            return None
+
+        for item in meal_products:
+            product = item.product
+
+            if product.unit != 'g':
+                return None
+
+            values = (
+                product.calories,
+                product.protein,
+                product.carbs,
+                product.fat,
+            )
+
+            if any(value is None for value in values):
+                return None
+
+            factor = Decimal(item.quantity) / Decimal('100')
+
+            totals['calories'] += Decimal(product.calories) * factor
+            totals['protein'] += product.protein * factor
+            totals['carbs'] += product.carbs * factor
+            totals['fat'] += product.fat * factor
+
+        return {
+            key: round(value, 1)
+            for key, value in totals.items()
+        }
+
     def __str__(self):
+        dish_name = self.dish.name if self.dish else "Без ястие"
+
         return (
-            f"{self.dish.name} "
+            f"{dish_name} "
             f"({self.get_day_of_week_display()} - "
             f"{self.get_meal_type_display()})"
         )
@@ -68,3 +125,33 @@ class Meal(models.Model):
         verbose_name = 'Планирано хранене'
         verbose_name_plural = 'Планирани хранения'
         ordering = ['day_of_week', 'meal_type']
+
+
+class MealProduct(models.Model):
+    meal = models.ForeignKey(
+        Meal,
+        on_delete=models.CASCADE,
+        related_name='products',
+    )
+
+    product = models.ForeignKey(
+        'inventory.Product',
+        on_delete=models.PROTECT,
+    )
+
+    quantity = models.PositiveIntegerField(
+        verbose_name='Количество',
+    )
+
+    def __str__(self):
+        return f"{self.product.name} - {self.quantity}"
+
+    class Meta:
+        verbose_name = 'Продукт в хранене'
+        verbose_name_plural = 'Продукти в хранене'
+        constraints = [
+            models.UniqueConstraint(
+                fields=['meal', 'product'],
+                name='unique_product_per_meal',
+            )
+        ]

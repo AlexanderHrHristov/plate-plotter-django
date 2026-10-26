@@ -31,14 +31,19 @@
             <tr>
                 <th>Име</th>
                 <th>Описание</th>
-                <th>Време за приготвяне</th>
+                <th>Време</th>
                 <th>Порции</th>
+                <th>kcal/порция</th>
+                <th>Протеин</th>
+                <th>Въглехидрати</th>
+                <th>Мазнини</th>
                 <th style="min-width: 380px;">Действия</th>
             </tr>
         </thead>
 
         <tbody>
             {% for dish in dishes %}
+            {% with macros=dish.calculate_macros %}
             <tr>
                 <td>
                     <a href="{% url 'dish-detail' dish.pk %}">
@@ -47,10 +52,20 @@
                 </td>
 
                 <td>{{ dish.description }}</td>
-
-                <td>{{ dish.preparation_time }} мин.</td>
-
+                <td>{{ dish.preparation_time|default_if_none:"—" }} мин.</td>
                 <td>{{ dish.servings }}</td>
+
+                {% if macros %}
+                    <td>{{ macros.calories|floatformat:"-1" }}</td>
+                    <td>{{ macros.protein|floatformat:"-1" }} г</td>
+                    <td>{{ macros.carbs|floatformat:"-1" }} г</td>
+                    <td>{{ macros.fat|floatformat:"-1" }} г</td>
+                {% else %}
+                    <td>—</td>
+                    <td>—</td>
+                    <td>—</td>
+                    <td>—</td>
+                {% endif %}
 
                 <td>
                     <div class="d-flex flex-nowrap gap-2">
@@ -71,10 +86,11 @@
                     </div>
                 </td>
             </tr>
+            {% endwith %}
 
             {% empty %}
             <tr>
-                <td colspan="5" class="text-center">
+                <td colspan="9" class="text-center">
                     Все още няма добавени ястия.
                 </td>
             </tr>

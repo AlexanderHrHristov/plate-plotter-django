@@ -28,31 +28,29 @@ class Product(models.Model):
   
     UNIT_GRAMS = 'g'
     UNIT_ML = 'ml'
-    UNIT_PCS = 'pcs'
 
     UNIT_CHOICES = [
-        (UNIT_GRAMS, 'грама'),
-        (UNIT_ML, 'мл'),
-        (UNIT_PCS, 'бр')
+        (UNIT_GRAMS, 'гр'),
+        (UNIT_ML, 'мл')
     ]
     CATEGORY_MEAT_FISH_EGGS = 'meat_fish_eggs'
     CATEGORY_MILK_CHEESE = 'milk_cheese'
     CATEGORY_FRUIT_VEGETABLES = 'fruit_vegetables'
-    CATEGORY_GRAINS_LEGUMES = 'grains_legumes'
-    CATEGORY_NUTS = 'nuts'
-    CATEGORY_OILS = 'oils'
+    CATEGORY_GRAINS = 'grains'
+    CATEGORY_NUTS_OILS = 'nuts_oils'
+    CATEGORY_LEGUMES = 'legumes'
     CATEGORY_SWEETS = 'sweets'
     CATEGORY_DRINKS = 'drinks'
     CATEGORY_PACKAGED_FOODS = 'packaged_foods'
     CATEGORY_SPICES = 'spices'
 
     CATEGORY_CHOICES = [
-        (CATEGORY_MEAT_FISH_EGGS, 'Месо, риба, яйца'),
-        (CATEGORY_MILK_CHEESE, 'Млекопродукти'),
+        (CATEGORY_MEAT_FISH_EGGS, 'Месни продукти, риба, яйца'),
+        (CATEGORY_MILK_CHEESE, 'Мляко и млечни продукти'),
         (CATEGORY_FRUIT_VEGETABLES, 'Плодове и зеленчуци'),
-        (CATEGORY_GRAINS_LEGUMES, 'Хляб, зърнени и бобови продукти'),
-        (CATEGORY_NUTS, 'Ядки'),
-        (CATEGORY_OILS, 'Масла'),
+        (CATEGORY_GRAINS, 'Хляб и зърнени продукти'),
+        (CATEGORY_NUTS_OILS, 'Ядки и масла'),
+        (CATEGORY_LEGUMES, 'Бобови култури и варива'),
         (CATEGORY_SWEETS, 'Сладки и десерти'),
         (CATEGORY_DRINKS, 'Напитки'),
         (CATEGORY_PACKAGED_FOODS, 'Пакетирани храни'),
@@ -88,11 +86,9 @@ class Product(models.Model):
         choices=UNIT_CHOICES
     )
 
-    package_quantity = models.DecimalField(
-        max_digits=10,
-        decimal_places=2,
+    package_quantity = models.PositiveIntegerField(
         default=1,
-        validators=[MinValueValidator(Decimal('0.01'))],
+        validators=[MinValueValidator(1)],
         verbose_name='Количество в опаковка'
     )
 
@@ -118,8 +114,8 @@ class Product(models.Model):
     )
 
     protein = models.DecimalField(
-        max_digits=6,
-        decimal_places=2,
+        max_digits=5,
+        decimal_places=1,
         null=True,
         blank=True,
         validators=[MinValueValidator(Decimal('0'))],
@@ -127,8 +123,8 @@ class Product(models.Model):
     )
 
     carbs = models.DecimalField(
-        max_digits=6,
-        decimal_places=2,
+        max_digits=5,
+        decimal_places=1,
         null=True,
         blank=True,
         validators=[MinValueValidator(Decimal('0'))],
@@ -136,8 +132,8 @@ class Product(models.Model):
     )
 
     fat = models.DecimalField(
-        max_digits=6,
-        decimal_places=2,
+        max_digits=5,
+        decimal_places=1,
         null=True,
         blank=True,
         validators=[MinValueValidator(Decimal('0'))],
@@ -165,9 +161,7 @@ class Inventory(models.Model):
         verbose_name='Продукт'
     )
     
-    available_quantity = models.DecimalField(
-        max_digits=6,
-        decimal_places=1,
+    available_quantity = models.PositiveIntegerField(
         verbose_name='Налично количество',
         blank=True,
         default=0
@@ -175,9 +169,7 @@ class Inventory(models.Model):
     
 
 
-    minimum_quantity = models.DecimalField(
-        max_digits=6,
-        decimal_places=1,
+    minimum_quantity = models.PositiveIntegerField(
         verbose_name='Минимално количество',
         blank=True,
         default=0

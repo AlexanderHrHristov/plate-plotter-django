@@ -1,0 +1,27 @@
+﻿{% extends 'base.html' %}
+{% block title %}Изтриване на хранене | PlatePlotter{% endblock %}
+{% block content %}
+<div class="row justify-content-center">
+    <div class="col-md-7">
+        <h2 class="mb-3">Изтриване на хранене</h2>
+
+        <p>
+            Сигурни ли сте, че искате да изтриете
+            <strong>{{ object }}</strong>?
+        </p>
+
+        <form method="post">
+            {% csrf_token %}
+
+            <button type="submit" class="btn btn-danger">
+                Да, изтрий
+            </button>
+
+            <a href="{% url 'weekmenu-detail' object.week_menu_id %}"
+               class="btn btn-secondary">
+                Отказ
+            </a>
+        </form>
+    </div>
+</div>
+{% endblock %}

@@ -1,51 +1,60 @@
+{% extends 'base.html' %} 
+{% load static %} 
 
-{% extends 'base.html' %}
-{% load static %}
-
-{% block title %}Начало | PlatePlotter{% endblock %}
+{% block title %}Начало | PlatePlotter{% endblock %} 
 
 {% block content %}
 
-<div class="text-center">
+<section class="home-hero">
+  <div class="home-overlay">
+    <h1 class="display-4 fw-bold mb-3">Добре дошли в PlatePlotter!</h1>
 
-    <h1 class="mb-3">Добре дошли в PlatePlotter!</h1>
-
-    <p class="lead mb-4">
-        Организирай продуктите, наличностите и любимите си рецепти.
+    <p class="fs-4 mb-0">
+      Организирай продуктите, наличностите и любимите си рецепти.
     </p>
+  </div>
+</section>
 
-    <img
-        src="{% static 'images/home.png' %}"
-        alt="PlatePlotter"
-        class="img-fluid rounded shadow-sm"
-        style="max-height: 420px;"
-    >
+<style>
+  .home-hero {
+    min-height: 600px;
+    background-image: url("{% static 'images/home.png' %}");
+    background-size: cover;
+    background-position: center;
+    border-radius: 12px;
 
-</div>
+    display: flex;
+    align-items: center;
 
-<div class="row g-3 mt-4">
+    padding: 4rem;
+  }
 
-    <div class="col-md-4">
-        <a href="{% url 'product-list' %}"
-           class="btn btn-outline-primary w-100">
-            Продукти
-        </a>
-    </div>
+  .home-overlay {
+    background-color: rgba(0, 0, 0, 0.6);
+    color: white;
+    padding: 2.5rem;
+    border-radius: 12px;
+    max-width: 850px;
+  }
 
-    <div class="col-md-4">
-        <a href="{% url 'inventory-list' %}"
-           class="btn btn-outline-primary w-100">
-            Наличности
-        </a>
-    </div>
+  @media (max-width: 768px) {
+    .home-hero {
+      min-height: 450px;
+      padding: 1rem;
+    }
 
-    <div class="col-md-4">
-        <a href="{% url 'dish-list' %}"
-           class="btn btn-outline-primary w-100">
-            Рецепти
-        </a>
-    </div>
+    .home-overlay {
+      padding: 1.5rem;
+    }
 
-</div>
+    .home-overlay h1 {
+      font-size: 2rem;
+    }
+
+    .home-overlay p {
+      font-size: 1.1rem !important;
+    }
+  }
+</style>
 
 {% endblock %}

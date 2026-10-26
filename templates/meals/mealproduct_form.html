@@ -1,0 +1,22 @@
+
+{% extends 'base.html' %}
+
+{% block title %}Добавяне на продукт | PlatePlotter{% endblock %}
+
+{% block content %}
+<h1 class="mb-4">Добавяне на продукт към хранене</h1>
+
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+
+    <button type="submit" class="btn btn-success">
+        Запази продукта
+    </button>
+
+    <a href="{% url 'weekmenu-list' %}"
+       class="btn btn-secondary">
+        Отказ
+    </a>
+</form>
+{% endblock %}

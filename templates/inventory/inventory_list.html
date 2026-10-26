@@ -72,6 +72,7 @@
                         </a>
                     </td>
 
+
                 {% else %}
                     <td>—</td>
                     <td>—</td>
@@ -82,8 +83,14 @@
                         </span>
                     </td>
 
-                    <td>—</td>
+                    <td>
+                    <a href="{% url 'inventory-add' %}"
+                        class="btn btn-primary btn-sm">
+                            Добави наличност
+                    </a>
+                    </td>
                 {% endif %}
+
             </tr>
 
             {% empty %}
