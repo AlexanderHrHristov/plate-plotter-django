@@ -110,6 +110,41 @@ class Product(models.Model):
         help_text='Базов продукт - винаги трябва да има в наличност'
     )
 
+ 
+    calories = models.PositiveIntegerField(
+        null=True,
+        blank=True,
+        verbose_name='Калории (kcal / 100 g)'
+    )
+
+    protein = models.DecimalField(
+        max_digits=6,
+        decimal_places=2,
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(Decimal('0'))],
+        verbose_name='Протеини (g / 100 g)'
+    )
+
+    carbs = models.DecimalField(
+        max_digits=6,
+        decimal_places=2,
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(Decimal('0'))],
+        verbose_name='Въглехидрати (g / 100 g)'
+    )
+
+    fat = models.DecimalField(
+        max_digits=6,
+        decimal_places=2,
+        null=True,
+        blank=True,
+        validators=[MinValueValidator(Decimal('0'))],
+        verbose_name='Мазнини (g / 100 g)'
+    )
+
+
     def __str__(self):
         if self.brand:
             return f"{self.name} ({self.brand})"

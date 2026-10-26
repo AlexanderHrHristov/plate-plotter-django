@@ -1,5 +1,5 @@
 from django.urls import path
-from .views import InventoryCreateView, StoreCreateView, StoreListView, StoreUpdateView, StoreDeleteView
+from .views import StoreCreateView, StoreListView, StoreUpdateView, StoreDeleteView
 from .views import ProductCreateView, ProductListView, ProductUpdateView, ProductDeleteView
 from .views import InventoryListView, InventoryCreateView, InventoryUpdateView
 

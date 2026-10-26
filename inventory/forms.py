@@ -7,6 +7,7 @@ class StoreForm(forms.ModelForm):
         fields = ['name']
 
 
+
 class ProductForm(forms.ModelForm):
     class Meta:
         model = Product
@@ -19,7 +20,11 @@ class ProductForm(forms.ModelForm):
             'package_quantity',
             'price',
             'is_basic',
-        ]       
+            'calories',
+            'protein',
+            'carbs',
+            'fat',
+        ]
 
 
 class InventoryForm(forms.ModelForm):
