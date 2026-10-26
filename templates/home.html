@@ -1,0 +1,51 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}Начало | PlatePlotter{% endblock %}
+
+{% block content %}
+
+<div class="text-center">
+
+    <h1 class="mb-3">Добре дошли в PlatePlotter!</h1>
+
+    <p class="lead mb-4">
+        Организирай продуктите, наличностите и любимите си рецепти.
+    </p>
+
+    <img
+        src="{% static 'images/home.png' %}"
+        alt="PlatePlotter"
+        class="img-fluid rounded shadow-sm"
+        style="max-height: 420px;"
+    >
+
+</div>
+
+<div class="row g-3 mt-4">
+
+    <div class="col-md-4">
+        <a href="{% url 'product-list' %}"
+           class="btn btn-outline-primary w-100">
+            Продукти
+        </a>
+    </div>
+
+    <div class="col-md-4">
+        <a href="{% url 'inventory-list' %}"
+           class="btn btn-outline-primary w-100">
+            Наличности
+        </a>
+    </div>
+
+    <div class="col-md-4">
+        <a href="{% url 'dish-list' %}"
+           class="btn btn-outline-primary w-100">
+            Рецепти
+        </a>
+    </div>
+
+</div>
+
+{% endblock %}

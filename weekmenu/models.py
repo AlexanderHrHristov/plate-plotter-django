@@ -56,9 +56,15 @@ class Meal(models.Model):
         ]   
     )
 
+    
     def __str__(self):
-        return f"{self.name} ({self.day_of_week})"
+        return (
+            f"{self.dish.name} "
+            f"({self.get_day_of_week_display()} - "
+            f"{self.get_meal_type_display()})"
+        )
 
     class Meta:
-        verbose_name = 'Ястие'
-        ordering = ['day_of_week']
+        verbose_name = 'Планирано хранене'
+        verbose_name_plural = 'Планирани хранения'
+        ordering = ['day_of_week', 'meal_type']

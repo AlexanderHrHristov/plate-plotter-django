@@ -1,0 +1,58 @@
+
+{% extends 'base.html' %}
+{% load static %}
+
+{% block title %}{{ week_menu.name }} | PlatePlotter{% endblock %}
+
+{% block content %}
+
+<div class="text-center mb-4">
+    <h1>{{ week_menu.name }}</h1>
+
+    <p class="text-muted">
+        Начална дата: {{ week_menu.start_date|date:"d.m.Y" }}
+    </p>
+
+    <img
+        src="{% static 'images/weekmenu.png' %}"
+        alt="Седмично меню"
+        class="img-fluid rounded shadow-sm"
+        style="max-height: 250px;"
+    >
+</div>
+
+<h4>Планирани хранения</h4>
+
+<div class="table-responsive">
+    <table class="table table-striped">
+        <thead>
+            <tr>
+                <th>Ден</th>
+                <th>Хранене</th>
+                <th>Ястие</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for meal in week_menu.meals.all %}
+            <tr>
+                <td>{{ meal.get_day_of_week_display }}</td>
+                <td>{{ meal.get_meal_type_display }}</td>
+                <td>{{ meal.dish.name }}</td>
+            </tr>
+            {% empty %}
+            <tr>
+                <td colspan="3" class="text-center">
+                    Все още няма добавени хранения.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
+
+<a href="{% url 'weekmenu-list' %}"
+   class="btn btn-secondary">
+    Назад
+</a>
+
+{% endblock %}

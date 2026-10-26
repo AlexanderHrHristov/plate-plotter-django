@@ -1,14 +1,29 @@
 
 {% extends 'base.html' %}
+{% load static %}
 
 {% block title %}Наличности | PlatePlotter{% endblock %}
 
 {% block content %}
-<h1>Наличности</h1>
 
-<a href="{% url 'inventory-add' %}" class="btn btn-primary mb-3">
-    Добави наличност
-</a>
+<div class="text-center mb-4">
+    <h1 class="mb-3">Наличности</h1>
+
+    <img
+        src="{% static 'images/inventory.png' %}"
+        alt="Наличности в PlatePlotter"
+        class="img-fluid rounded shadow-sm"
+        style="max-height: 300px;"
+    >
+</div>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <h4 class="mb-0">Списък с наличности</h4>
+
+    <a href="{% url 'inventory-add' %}" class="btn btn-primary">
+        Добави наличност
+    </a>
+</div>
 
 <div class="table-responsive">
     <table class="table table-striped table-hover align-middle">
@@ -22,54 +37,64 @@
             </tr>
         </thead>
 
-       
-<tbody>
-    {% for product in products %}
-    <tr>
-        <td>{{ product.name }}</td>
+        <tbody>
+            {% for product in products %}
+            <tr>
+                <td>{{ product.name }}</td>
 
-        {% if product.inventory %}
-            <td>
-                {{ product.inventory.available_quantity|floatformat:"-2" }}
-                {{ product.get_unit_display }}
-            </td>
-            <td>
-                {{ product.inventory.minimum_quantity|floatformat:"-2" }}
-                {{ product.get_unit_display }}
-            </td>
-            <td>
-                {% if product.inventory.is_product_below_minimum %}
-                    <span class="badge bg-danger">За купуване</span>
+                {% if product.inventory %}
+                    <td>
+                        {{ product.inventory.available_quantity|floatformat:"-2" }}
+                        {{ product.get_unit_display }}
+                    </td>
+
+                    <td>
+                        {{ product.inventory.minimum_quantity|floatformat:"-2" }}
+                        {{ product.get_unit_display }}
+                    </td>
+
+                    <td>
+                        {% if product.inventory.is_product_below_minimum %}
+                            <span class="badge bg-danger">
+                                За купуване
+                            </span>
+                        {% else %}
+                            <span class="badge bg-success">
+                                Достатъчно
+                            </span>
+                        {% endif %}
+                    </td>
+
+                    <td>
+                        <a href="{% url 'inventory-edit' product.inventory.pk %}"
+                           class="btn btn-warning btn-sm">
+                            Редактирай
+                        </a>
+                    </td>
+
                 {% else %}
-                    <span class="badge bg-success">Достатъчно</span>
-                {% endif %}
-            </td>
-            <td>
-                <a href="{% url 'inventory-edit' product.inventory.pk %}"
-                   class="btn btn-warning btn-sm">
-                    Редактирай
-                </a>
-            </td>
-        {% else %}
-            <td>—</td>
-            <td>—</td>
-            <td>
-                <span class="badge bg-secondary">
-                    Няма наличност
-                </span>
-            </td>
-            <td>—</td>
-        {% endif %}
-    </tr>
-    {% empty %}
-    <tr>
-        <td colspan="5" class="text-center">
-            Все още няма добавени продукти.
-        </td>
-    </tr>
-    {% endfor %}
-</tbody>
+                    <td>—</td>
+                    <td>—</td>
 
+                    <td>
+                        <span class="badge bg-secondary">
+                            Няма наличност
+                        </span>
+                    </td>
+
+                    <td>—</td>
+                {% endif %}
+            </tr>
+
+            {% empty %}
+            <tr>
+                <td colspan="5" class="text-center">
+                    Все още няма добавени продукти.
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
     </table>
 </div>
+
 {% endblock %}

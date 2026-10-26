@@ -1,12 +1,66 @@
-{% extends 'base.html' %} {% block title %} Добавяне на продукт | PlatePlotter
-{% endblock %} {% block content %}
-<h1>Добавяне на продукт</h1>
+
+{% extends 'base.html' %}
+
+{% block title %}
+    Продукт | PlatePlotter
+{% endblock %}
+
+{% block content %}
+
+<h1>
+    {% if object %}
+        Редактиране на продукт
+    {% else %}
+        Добавяне на продукт
+    {% endif %}
+</h1>
 
 <form method="post">
-  {% csrf_token %} {{ form.as_p }}
+    {% csrf_token %}
 
-  <button type="submit" class="btn btn-success">Запази</button>
+    {{ form.non_field_errors }}
 
-  <a href="{% url 'product-list' %}" class="btn btn-secondary"> Отказ </a>
+    <h4 class="mt-4 mb-3">Информация за продукта</h4>
+
+    {% for field in form %}
+        {% if field.name != 'calories' and field.name != 'protein' and field.name != 'carbs' and field.name != 'fat' %}
+            <div class="mb-3">
+                {{ field.label_tag }}
+                {{ field }}
+                {{ field.errors }}
+
+                {% if field.help_text %}
+                    <div class="form-text">
+                        {{ field.help_text }}
+                    </div>
+                {% endif %}
+            </div>
+        {% endif %}
+    {% endfor %}
+
+    <hr class="my-4">
+
+    <h4 class="mb-3">Хранителни стойности за 100 g / 100 ml</h4>
+
+    <div class="row">
+        {% for field in form %}
+            {% if field.name == 'calories' or field.name == 'protein' or field.name == 'carbs' or field.name == 'fat' %}
+                <div class="col-md-6 mb-3">
+                    {{ field.label_tag }}
+                    {{ field }}
+                    {{ field.errors }}
+                </div>
+            {% endif %}
+        {% endfor %}
+    </div>
+
+    <button type="submit" class="btn btn-success">
+        Запази
+    </button>
+
+    <a href="{% url 'product-list' %}" class="btn btn-secondary">
+        Отказ
+    </a>
 </form>
+
 {% endblock %}
