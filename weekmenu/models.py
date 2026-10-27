@@ -124,7 +124,20 @@ class Meal(models.Model):
     class Meta:
         verbose_name = 'Планирано хранене'
         verbose_name_plural = 'Планирани хранения'
-        ordering = ['day_of_week', 'meal_type']
+        ordering = [
+        models.Case(
+        models.When(day_of_week='Monday', then=models.Value(1)),
+        models.When(day_of_week='Tuesday', then=models.Value(2)),
+        models.When(day_of_week='Wednesday', then=models.Value(3)),
+        models.When(day_of_week='Thursday', then=models.Value(4)),
+        models.When(day_of_week='Friday', then=models.Value(5)),
+        models.When(day_of_week='Saturday', then=models.Value(6)),
+        models.When(day_of_week='Sunday', then=models.Value(7)),
+        default=models.Value(8),
+        output_field=models.IntegerField(),
+    ),
+    'meal_type',
+]
 
 
 class MealProduct(models.Model):
