@@ -3,6 +3,8 @@ from django.db import models
 from decimal import Decimal
 from django.core.validators import MinValueValidator
 
+from django.core.exceptions import ValidationError
+
 
 class Store(models.Model):
     name = models.CharField(
@@ -139,6 +141,45 @@ class Product(models.Model):
         validators=[MinValueValidator(Decimal('0'))],
         verbose_name='Мазнини (g / 100 g)'
     )
+
+    def clean(self):
+        super().clean()
+
+        errors = {}
+
+
+        macros = [self.protein, self.carbs, self.fat]
+
+        if all(value is not None for value in macros):
+            total_macros = sum(macros)
+
+            if total_macros > Decimal('100'):
+                errors['fat'] = (
+                    'Сборът на протеини, въглехидрати и мазнини '
+                    'не може да надвишава 100 г на 100 г продукт.'
+                )
+
+    
+        nutritional_values = [
+            self.calories,
+            self.protein,
+            self.carbs,
+            self.fat,
+        ]
+
+        filled_values = [
+            value is not None
+            for value in nutritional_values
+        ]
+
+        if any(filled_values) and not all(filled_values):
+            errors['calories'] = (
+                'Попълнете всички хранителни стойности '
+                'или ги оставете празни.'
+            )
+
+        if errors:
+            raise ValidationError(errors)
 
 
     def __str__(self):

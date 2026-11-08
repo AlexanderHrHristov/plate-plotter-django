@@ -23,6 +23,70 @@
 
   <a href="{% url 'product-add' %}" class="btn btn-primary"> Добави продукт </a>
 </div>
+<form method="get" class="row g-3 mb-4">
+
+  <div class="col-md-3">
+    <label for="search" class="form-label">Търсене</label>
+    <input
+      type="text"
+      name="search"
+      id="search"
+      class="form-control"
+      placeholder="Име или марка"
+      value="{{ selected_search }}"
+    >
+  </div>
+
+  <div class="col-md-3">
+    <label for="category" class="form-label">Категория</label>
+    <select name="category" id="category" class="form-select">
+      <option value="">Всички категории</option>
+
+      {% for value, label in categories %}
+        <option value="{{ value }}"
+          {% if selected_category == value %}selected{% endif %}>
+          {{ label }}
+        </option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="col-md-2">
+    <label for="store" class="form-label">Магазин</label>
+    <select name="store" id="store" class="form-select">
+      <option value="">Всички магазини</option>
+
+      {% for store in stores %}
+        <option value="{{ store.pk }}"
+          {% if selected_store == store.pk|stringformat:"s" %}selected{% endif %}>
+          {{ store.name }}
+        </option>
+      {% endfor %}
+    </select>
+  </div>
+
+  <div class="col-md-2">
+    <label for="sort" class="form-label">Сортиране</label>
+    <select name="sort" id="sort" class="form-select">
+      <option value="name" {% if selected_sort == 'name' %}selected{% endif %}>Име А–Я</option>
+      <option value="-name" {% if selected_sort == '-name' %}selected{% endif %}>Име Я–А</option>
+      <option value="price" {% if selected_sort == 'price' %}selected{% endif %}>Цена възходяща</option>
+      <option value="-price" {% if selected_sort == '-price' %}selected{% endif %}>Цена низходяща</option>
+    </select>
+  </div>
+
+  <div class="col-md-2 d-flex align-items-end gap-2">
+    <button type="submit" class="btn btn-primary">
+      Филтрирай
+    </button>
+
+    <a href="{% url 'product-list' %}" class="btn btn-outline-secondary">
+      Изчисти
+    </a>
+  </div>
+
+</form>
+
 
 <div class="table-responsive">
   <table class="table table-striped table-hover align-middle">
@@ -85,7 +149,7 @@
 
       {% empty %}
       <tr>
-        <td colspan="8" class="text-center">Все още няма добавени продукти.</td>
+        <td colspan="8" class="text-center">Няма намерени продукти по зададените критерии.</td>
       </tr>
       {% endfor %}
     </tbody>

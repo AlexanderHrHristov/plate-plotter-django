@@ -49,6 +49,12 @@
                     {{ field.label_tag }}
                     {{ field }}
                     {{ field.errors }}
+
+                    {% if field.help_text %}
+                        <div class="form-text">
+                            {{ field.help_text }}
+                        </div>
+                    {% endif %}
                 </div>
             {% endif %}
         {% endfor %}
