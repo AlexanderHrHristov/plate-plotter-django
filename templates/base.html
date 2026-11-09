@@ -16,8 +16,12 @@
     {% include "header_footer/navigation.html" %}
 
     <main class="container my-4">
+
+      {% include "partials/messages.html" %}
+
       {% block content %}
       {% endblock %}
+
     </main>
 
     {% include "header_footer/footer.html" %}

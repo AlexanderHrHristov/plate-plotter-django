@@ -18,7 +18,7 @@
 <form method="post">
     {% csrf_token %}
 
-    {{ form.non_field_errors }}
+    {% include "partials/form_errors.html" %}
 
     <h4 class="mt-4 mb-3">Информация за продукта</h4>
 

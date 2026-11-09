@@ -61,6 +61,7 @@ class ProductListView(ListView):
     model = Product
     template_name = 'inventory/product_list.html'
     context_object_name = 'products'
+    paginate_by = 10
 
     def get_queryset(self):
         queryset = Product.objects.all()
@@ -102,6 +103,11 @@ class ProductListView(ListView):
         context['selected_category'] = self.request.GET.get('category', '')
         context['selected_store'] = self.request.GET.get('store', '')
         context['selected_sort'] = self.request.GET.get('sort', 'name')
+
+
+        query_params = self.request.GET.copy()
+        query_params.pop('page', None)
+        context['page_query'] = query_params.urlencode()
 
         return context
     
