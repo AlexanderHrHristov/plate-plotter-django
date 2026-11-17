@@ -27,17 +27,17 @@ class ProductForm(forms.ModelForm):
         ]
         widgets = {
             'name': forms.TextInput(attrs={
-                'placeholder': 'Напр. Пилешко филе'
+                'placeholder': 'Например "Яйца"'
             }),
             'brand': forms.TextInput(attrs={
-                'placeholder': 'Напр. Lidl'
+                'placeholder': 'Напр. "Моя магазин"'
             }),
             'package_quantity': forms.NumberInput(attrs={
                 'placeholder': 'Напр. 500',
                 'min': 1
             }),
             'price': forms.NumberInput(attrs={
-                'placeholder': 'Напр. 8.99',
+                'placeholder': 'Например 1.99',
                 'min': 0.01,
                 'step': 0.01
             }),

@@ -19,6 +19,18 @@ class RecipeItemForm(forms.ModelForm):
     class Meta:
         model = RecipeItem
         fields = ['product', 'quantity']
+        labels = {
+            'product': 'Продукт',
+            'quantity': 'Количество',
+        }
+        widgets = {
+            "quantity": forms.NumberInput(
+                attrs={"placeholder": "Въведете количество"}
+            ),
+        }
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        self.fields["product"].empty_label = "Изберете продукт"
 
 
 RecipeItemFormSet = inlineformset_factory(

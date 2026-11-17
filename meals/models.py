@@ -4,10 +4,12 @@ from decimal import Decimal
 
 class Dish(models.Model):
     name = models.CharField(
+        verbose_name='Име на ястие',
         max_length=100, 
         unique=True
         )
     description = models.TextField(
+        verbose_name='Описание/Рецепта',
         blank=True
         )
     preparation_time = models.PositiveIntegerField(
@@ -16,7 +18,7 @@ class Dish(models.Model):
         null=True
     )
     servings = models.PositiveIntegerField(
-        verbose_name='Bрой порции',
+        verbose_name='Брой порции',
         default=1
     )
     

@@ -144,15 +144,17 @@ class ProductDeleteView(DeleteView):
 
         messages.success(
             self.request,
-            'Продуктът беше изтрит успешно.'
+            'Продуктът е изтрит успешно.'
         )
         return response
+
 
 
 class InventoryListView(ListView):
     model = Product
     template_name = 'inventory/inventory_list.html'
     context_object_name = 'products'
+    paginate_by = 10
 
 
 class InventoryCreateView(CreateView):

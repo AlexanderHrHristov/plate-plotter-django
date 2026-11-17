@@ -35,6 +35,8 @@ class Product(models.Model):
         (UNIT_GRAMS, 'гр'),
         (UNIT_ML, 'мл')
     ]
+    
+    
     CATEGORY_MEAT_FISH_EGGS = 'meat_fish_eggs'
     CATEGORY_MILK_CHEESE = 'milk_cheese'
     CATEGORY_FRUIT_VEGETABLES = 'fruit_vegetables'
@@ -45,6 +47,7 @@ class Product(models.Model):
     CATEGORY_DRINKS = 'drinks'
     CATEGORY_PACKAGED_FOODS = 'packaged_foods'
     CATEGORY_SPICES = 'spices'
+
 
     CATEGORY_CHOICES = [
         (CATEGORY_MEAT_FISH_EGGS, 'Месни продукти, риба, яйца'),
@@ -70,6 +73,7 @@ class Product(models.Model):
         blank=True
     )
 
+
     category = models.CharField(
         max_length=35,
         verbose_name='Категория',
@@ -87,6 +91,7 @@ class Product(models.Model):
         verbose_name='Мерна единица',
         choices=UNIT_CHOICES
     )
+
 
     package_quantity = models.PositiveIntegerField(
         default=1,
