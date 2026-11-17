@@ -72,3 +72,12 @@ class InventoryForm(forms.ModelForm):
             'available_quantity',
             'minimum_quantity',
         ]
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        if self.instance.pk:
+            self.fields['product'].disabled = True
+            self.fields['product'].help_text = (
+                'Името на продукта не може да се променя след създаване '
+                            )
